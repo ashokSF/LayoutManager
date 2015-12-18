@@ -1,0 +1,295 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <h:head>
+        <title>ImageEditor</title>
+
+        <h:outputScript library="primefaces" name="jquery/jquery.js" target="head"/>
+        <h:outputScript library="primefaces" name="jquery/jquery-plugins.js" target="head"/>
+        <h:outputScript library="js" name="jquery-ui.js" target="head"/>
+        <h:outputScript library="js" name="jquery-ui.min.js" target="head"/>
+        <h:outputScript library="js" name="jquery.textover.js" target="head"/>
+
+        <!-- Cropper -->
+        <h:outputScript library="js" name="cropper.js" target="head"/>
+        <h:outputScript library="js" name="cropper.min.js" target="head"/>
+
+
+        <!-- Fabrics -->
+        <h:outputScript library="js" name="fabric.js" target="head"/>
+        <h:outputScript library="js" name="fabric.min.js" target="head"/>
+        <h:outputScript library="js" name="fabric.require.js" target="head"/>
+
+
+        <h:outputStylesheet library="css" name="cropper.css" />
+        <h:outputStylesheet library="css" name="cropper.min.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
+
+
+        <style>
+            .cropWraperCircle {
+                border-radius: 50%
+            }
+
+
+
+            .hexagon {
+                overflow: hidden;
+                visibility: hidden;
+                -webkit-transform: rotate(120deg);
+                -moz-transform: rotate(120deg);
+                -ms-transform: rotate(120deg);
+                -o-transform: rotate(120deg);
+                transform: rotate(120deg);
+                cursor: pointer;
+            }
+            .hexagon-in1 {
+                overflow: hidden;
+                width: 100%;
+                height: 100%;
+                -webkit-transform: rotate(-60deg);
+                -moz-transform: rotate(-60deg);
+                -ms-transform: rotate(-60deg);
+                -o-transform: rotate(-60deg);
+                transform: rotate(-60deg);
+            }
+            .hexagon-in2 {
+                width: 100%;
+                height: 100%;
+                background-repeat: no-repeat;
+                background-position: 50%;
+                background-image: url(/SurixonDemo/resources/images/bridge.jpg);
+                visibility: visible;
+                -webkit-transform: rotate(-60deg);
+                -moz-transform: rotate(-60deg);
+                -ms-transform: rotate(-60deg);
+                -o-transform: rotate(-60deg);
+                transform: rotate(-60deg);
+            }
+
+            .hexagon1 {
+                width: 400px;
+                height: 200px;
+                margin: 0 0 0 -80px;
+            }
+
+            #star-five {
+                margin: 50px 0;
+                position: relative;
+                display: block;
+                background-image: url(/SurixonDemo/resources/images/bridge.jpg);
+                width: 0px;
+                height: 0px;
+                border-right: 100px solid transparent;
+                border-bottom: 70px solid;
+                border-left: 100px solid transparent;
+                transform: rotate(35deg);
+            }
+            #star-five:before {
+                border-bottom: 80px solid;
+                border-left: 30px solid transparent;
+                border-right: 30px solid transparent;
+                position: absolute;
+                height: 0;
+                width: 0;
+                top: -45px;
+                left: -65px;
+                display: block;
+                content: '';
+                transform: rotate(-35deg);
+            }
+            #star-five:after {
+                position: absolute;
+                display: block;
+                top: 3px;
+                left: -105px;
+                width: 0px;
+                height: 0px;
+                border-right: 100px solid transparent;
+                border-bottom: 70px solid;
+                border-left: 100px solid transparent;
+                transform: rotate(-70deg);
+                content: '';
+            }
+
+
+        </style>
+
+        <script type='text/javascript'>
+
+            $ = jQuery;
+            var cropper;
+            var textover_api;
+
+
+            $(document).on("click", "#zoomIn",
+                    function () {
+                        cropper.zoom(0.1);
+                    });
+
+            $(document).on("click", "#zoomOut",
+                    function () {
+                        cropper.zoom(-0.1);
+                    });
+
+            $(document).on("click", "#rotateLeft",
+                    function () {
+                        cropper.rotate(-20);
+                    });
+
+            $(document).on("click", "#rotateRight",
+                    function () {
+                        cropper.rotate(20);
+                    });
+
+            $(document).on("click", "#crop",
+                    function () {
+
+                        var canvas = cropper.getCroppedCanvas();
+                        var dataUrl = canvas.toDataURL();
+                        var hidden = document.getElementById("imgEditor:dataURL");
+                        hidden.value = dataUrl;
+
+                        $('#croppedImage').attr("src", dataUrl);
+                        $(".hexagon-in2").css("background-image", "url(" + dataUrl + ")")
+
+                        /*
+                         cropper.getCroppedCanvas().toBlob(
+                         function (blob) {
+                         var formData = new FormData();
+                         
+                         formData.append('croppedImage', blob);
+                         
+                         $.ajax('/SurixonDemo/resources/images/crop', {
+                         method: "POST",
+                         data: formData,
+                         processData: false,
+                         contentType: false,
+                         success: function () {
+                         console.log('Upload success');
+                         },
+                         error: function () {
+                         console.log('Upload error');
+                         }
+                         });
+                         });*/
+                    }
+
+            );
+
+            function init() {
+
+
+                cropper = $('#image').cropper({
+                    aspectRatio: 16 / 9,
+                    crop: function (e) {
+                        // Output the result data for cropping image.
+                        console.log(e.x);
+                        console.log(e.y);
+                        console.log(e.width);
+                        console.log(e.height);
+                        console.log(e.rotate);
+                        console.log(e.scaleX);
+                        console.log(e.scaleY);
+                    }
+                }).data('cropper');
+
+
+                $('#image').TextOver({}, function () {
+                    textover_api = this;
+                });
+            }
+
+
+        </script>
+
+
+
+
+    </h:head>
+
+
+    <h:body>
+        <h:form id="imgEditor">
+            <p:growl id="growl" showDetail="true" sticky="true" />  
+
+
+            <h:panelGrid columns="5">
+                <p:graphicImage width="300" height="300" id="base" value="#{imageController.imageUrl}" cache="true"   onclick="PF('imageEditor').show();
+                        init();" />  
+
+                <img id="croppedImage" width="250px;" height="250px;" class="cropWraperCircle"/>
+
+
+                <div class="hexagon hexagon1"><div class="hexagon-in1"><div class="hexagon-in2"></div></div></div>
+
+                <div id="star-five"></div>
+
+
+            </h:panelGrid>
+
+
+
+
+            <p:dialog header="Image Editor" widgetVar="imageEditor" modal="true" height="800" width="800">
+                <div id="imageWrapper" >  
+                    <img id="image" src="/SurixonDemo/resources/images/bridge.jpg" />
+
+                </div>
+                <div class="btn-group">
+                    <button id="zoomIn" type="button" class="btn btn-primary" data-method="zoom" data-option="0.1" title="Zoom In">
+                        <span id="zoomIn" class="docs-tooltip" data-toggle="tooltip" title="$().cropper('zoom', 0.1);">
+                            <span class="fa fa-search-plus"></span>
+                        </span>
+                    </button>
+                    <button id="zoomOut" type="button" class="btn btn-primary" data-method="zoom" data-option="-0.1" title="Zoom Out">
+                        <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper('zoom';, -0.1)">
+                            <span class="fa fa-search-minus"></span>
+                        </span>
+                    </button>
+                </div>
+
+                <div class="btn-group">
+                    <button id="rotateLeft" type="button" class="btn btn-primary" data-method="rotate" data-option="-45" title="Rotate Left">
+                        <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;rotate&quot;, -45)">
+                            <span class="fa fa-rotate-left"></span>
+                        </span>
+                    </button>
+                    <button id="rotateRight"  type="button" class="btn btn-primary" data-method="rotate" data-option="45" title="Rotate Right">
+                        <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;rotate&quot;, 45)">
+                            <span class="fa fa-rotate-right"></span>
+                        </span>
+                    </button>
+                </div>
+
+                <button id="crop" type="button" class="btn btn-primary" data-method="setDragMode" data-option="crop" title="Crop">
+                    <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;setDragMode&quot;, &quot;crop&quot;)">
+                        <span class="fa fa-crop"></span>
+
+                    </span>
+
+                </button>
+
+
+
+                <h:inputHidden id="dataURL" value="#{imageController.dataURL}" />
+
+
+
+            </p:dialog>
+        </h:form>
+    </h:body>
+
+
+
+</html>
+
