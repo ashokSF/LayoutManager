@@ -92,43 +92,6 @@ $(function () {
 });
 
 
-function refreshGridster() {
-
-}
-
-function showLayoutPreview() {
-    event.preventDefault();
-
-    var prGridster = $("#gridster").clone();
-    prGridster.attr("id", "prGridster");
-
-    prGridster.dialog({
-        width: (newWidth + 30),
-        height: (newHeight + 130),
-        helper: 'clone',
-        modal: false,
-        resizable: false,
-        title: "Layout preview",
-        draggable: false,
-        buttons: [
-            {
-                text: "Save",
-                width: 100,
-                icons: {
-                    primary: "ui-icon-disk"
-                },
-                click: function () {
-                    $(this).dialog("destroy");
-                }
-            }
-        ],
-        close: function (event, ui) {
-            $(this).dialog("destroy");
-        }
-    });
-}
-
-
 function handleDrop(event, ui) {
     var droppedCar = ui.draggable.text(),
             helper = ui.helper,
