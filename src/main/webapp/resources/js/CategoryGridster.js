@@ -25,6 +25,15 @@ $(function () {
         max_cols: 7,
         max_rows: 6,
         shift_larger_widgets_down: false,
+        serialize_params: function ($w, wgd) {
+            return {
+                id: $($w).attr('id'),
+                col: wgd.col,
+                row: wgd.row,
+                size_x: wgd.size_x,
+                size_y: wgd.size_y
+            };
+        },
         resize: {
             enabled: true,
             stop: function (e, ui, $widget) {
@@ -79,6 +88,12 @@ $(function () {
                         primary: "ui-icon-disk"
                     },
                     click: function () {
+                        var js = gridster.serialize();
+                        
+
+                        var hidden = document.getElementById("gridsterForm:serializedData");
+                        hidden.value = JSON.stringify(js);
+                        
                         $(this).dialog("destroy");
                     }
                 }
@@ -93,12 +108,12 @@ $(function () {
 
 
 function handleDrop(event, ui) {
-    var droppedCar = ui.draggable.text(),
+    var droppedCat = ui.draggable.text(),
             helper = ui.helper,
             position = ui.position,
             offset = ui.offset;
 
-    var html = '<li>' + droppedCar + '<button class="delete-button" style="float: right;">Delete</button></li>'
+    var html = '<li id="' + droppedCat + '">' + droppedCat + '<button class="delete-button" style="float: right;">Delete</button></li>'
 
     gridster.add_widget(html, 1, 1);
 
