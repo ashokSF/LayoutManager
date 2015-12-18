@@ -33,6 +33,12 @@
         <h:outputScript library="js" name="jquery-ui.min.js" target="head"/>
 
 
+        <h:outputStylesheet library="css" name="jquery.gridster.css" />
+        <h:outputStylesheet library="css" name="style.css" />
+        <h:outputScript library="js" name="jquery.gridster.js" target="head"/>
+        <h:outputScript library="js" name="CategoryGridster.js" target="head"/>   
+
+
     </h:head>
 
     <h:body>
@@ -60,16 +66,16 @@
                     <p:tabView id="previewTab" style="border: none!important;">
                         <p:tab title="Layout Editor">
                             <p:layout fullPage="true">
-                   
-                            
-                            <p:commandButton id="preview" value="Preview" icon="ui-icon-search"/>
 
-                            <div id="gridster" class="gridster" style="width: 1000; height: 500; alignment-adjust: central;" >
-                                <ul>
-                                </ul>
-                            </div>
+
+                                <p:commandButton id="preview" value="Preview" icon="ui-icon-search"/>
+
+                                <div id="gridster" class="gridster" style="width: 1000; height: 500; alignment-adjust: central;" >
+                                    <ul>
+                                    </ul>
+                                </div>
                             </p:layout>
-                            
+
                         </p:tab>
                     </p:tabView>
 
