@@ -10,14 +10,27 @@ package com.nmc.model;
  * @author Иван
  */
 public class Image {
-    private String url;
+    
+    private String name;
+    
+    private String id;
 
-    public String getUrl() {
-        return url;
+    public String getName() {
+        return name;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
-    }    
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    
     
 }

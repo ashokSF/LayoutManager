@@ -7,6 +7,7 @@ package com.nmc.controller;
 
 import com.nmc.connection.DataServiceFactory;
 import com.nmc.model.Image;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -21,18 +22,18 @@ import org.apache.log4j.Logger;
 @RequestScoped
 public class ImageController {
     
-    public static final String IMAGEIMAGE_PATH = "http://100.43.205.74:4152/ServerImage/images/";
+    public static final String IMAGEIMAGE_PATH = "http://100.43.205.74:4224/ServerImage/images/";
     private static final Logger LOG = Logger.getLogger(ImageController.class);
     
     private Image image;
         
-    private List<Image> image_list;
+    private ArrayList<Image> image_list;
 
     /**
      * Creates a new instance of ImageController
      */
     public ImageController() {
-        DataServiceFactory.getAdvertisingImage();
+        image_list = DataServiceFactory.getAdvertisingImage();
     }
 
     public Image getImage() {
@@ -47,9 +48,13 @@ public class ImageController {
         return image_list;
     }
 
-    public void setImage_list(List<Image> image_list) {
+    public void setImage_list(ArrayList<Image> image_list) {
         this.image_list = image_list;
     }   
+    
+    public String getImageUrlBase() {
+        return IMAGEIMAGE_PATH;
+    }
     
     
 }

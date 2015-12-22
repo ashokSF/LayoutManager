@@ -5,14 +5,26 @@
  */
 package com.nmc.connection;
 
+import com.nmc.model.Image;
 import com.nmc.utils.OperationEnum;
+import com.nmc.utils.json.KeyFinder;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 import org.apache.log4j.Logger;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+import org.json.simple.parser.ContainerFactory;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 /**
  *
@@ -47,6 +59,10 @@ public class DataServiceFactory {
     public static final String FN_ORDER_ASC = "ASC";
     public static final String SERVER_DATE_FORMAT = "MM-dd-yyyy KK:mm:ss.SSS Z";
 
+    //Images response
+    public static final String RS_IMAGE_ID = "120.86";
+    public static final String RS_IMAGE_NAME = "121.170";
+
     private static final Logger LOG = Logger.getLogger(DataServiceFactory.class);
 
     public static void getAdvertisingItem() {
@@ -62,17 +78,42 @@ public class DataServiceFactory {
 
     }
 
-    public static void getAdvertisingImage() {
+    public static ArrayList<Image> getAdvertisingImage() {
 
         HashMap<String, String> params = new HashMap();
         HashMap<String, String> filters = new HashMap();
+        
+        ArrayList<Image> image_list = new ArrayList();
 
         filters.put(FN_USER_ID, "0001202A000000001054");
         filters.put("operator", "eq");
 
         String input = buildJsonToServer(OperationEnum.GET_ADVERTISING_IMAGE.toString(), params, filters);
 
-        String out = ConnectionHttps.doPost(defaultServer, input);
+        String jsonResponse = ConnectionHttps.doPost(defaultServer, input);
+        JSONParser parser = new JSONParser();
+        
+        JSONArray result_array = null;
+
+        try {
+            JSONObject obj = (JSONObject) parser.parse(jsonResponse);
+            JSONArray result = (JSONArray) obj.get(FN_RESULT_NAME);
+            for (Object nest : result) {
+                result_array =  (JSONArray)((JSONObject) nest).get(FN_RESULT_NAME);
+            }
+
+            for (Object img : result_array) {
+                Image image = new Image();
+                image.setId((String)((JSONObject) img).get(RS_IMAGE_ID));
+                image.setName((String)((JSONObject) img).get(RS_IMAGE_NAME));
+                image_list.add(image);
+            }
+
+        } catch (ParseException pe) {
+            pe.printStackTrace();
+        }
+        
+        return image_list;
 
     }
 
@@ -160,4 +201,5 @@ public class DataServiceFactory {
         dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         return dateFormat.format(new Date());
     }
+
 }
