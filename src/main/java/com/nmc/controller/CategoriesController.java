@@ -5,7 +5,7 @@
  */
 package com.nmc.controller;
 
-import com.nmc.connection.DataService;
+import com.nmc.connection.DataServiceFactory;
 import com.nmc.model.Category;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -39,7 +39,7 @@ public class CategoriesController {
         categories.add("RSS");
         categories.add("Images");
 
-        DataService e = new DataService();
+        DataServiceFactory e = new DataServiceFactory();
         e.test();
 
     }

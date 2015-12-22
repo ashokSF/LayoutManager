@@ -15,7 +15,7 @@ import org.apache.commons.lang3.StringUtils;
  *
  * @author jose
  */
-public class DataService {
+public class DataServiceFactory {
 
     private static String defaultServer = "https://100.43.205.74:8095/NmcServerS/nmc-server/post/";
 
@@ -63,18 +63,20 @@ public class DataService {
 
         str.append("\"").append(FN_LANGUAGE_NAME).append("\":");
         str.append("\"").append("es").append("\",");
-        
-        /*
-        str.append("\"").append(FN_USER_ID).append("\":");
-        str.append("\",");
-                */
 
         str.append("\"").append(FN_OPLIST_NAME).append("\":[");
         
-       // str.append(operationToJSON(operationData));
+        str = buildJsonOperation(str);
+
+        str.append("]}");
+        return str.toString();
+    }
+    
+    private StringBuilder buildJsonOperation(StringBuilder str) {
+        // str.append(operationToJSON(operationData));
         str.append("{");
         str.append("\"").append(FN_OPERATION_NAME).append("\":");
-        str.append("\"").append(OperationEnum.GET_ADVERTISING_ITEM.getOperationServerCode()).append("\",");    
+        str.append("\"").append(OperationEnum.GET_ADVERTISING_ITEM).append("\",");    
         
         
         //Operation PARAMS
@@ -85,10 +87,9 @@ public class DataService {
         str.append("}");     
         
         
-        str.append("}"); //Operation end
-
-        str.append("]}");
-        return str.toString();
+        str.append("}"); //Operation end     
+        
+        return str;
     }
 
     private static String getNowTime() {

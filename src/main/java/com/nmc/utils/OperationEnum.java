@@ -24,5 +24,12 @@ public enum OperationEnum {
     public String getOperationServerCode() {
         return operationServerCode;
     }
+
+    @Override
+    public String toString() {
+        return operationServerCode;
+    }
+    
+    
     
 }

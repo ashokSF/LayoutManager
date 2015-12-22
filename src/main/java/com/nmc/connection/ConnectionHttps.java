@@ -102,7 +102,10 @@ public class ConnectionHttps implements Serializable {
             wr.flush();
             wr.close();
             String response = "";
+            
             System.out.println(con.getResponseCode());
+            
+            
             if (con.getResponseCode() == 201) {
                 BufferedReader in = new BufferedReader(
                         new InputStreamReader(con.getInputStream()));
