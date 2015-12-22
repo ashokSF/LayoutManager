@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.polo.surixondemo.model;
+package com.nmc.model;
 /**
  *
  * @author Иван

@@ -102,6 +102,7 @@ public class ConnectionHttps implements Serializable {
             wr.flush();
             wr.close();
             String response = "";
+            System.out.println(con.getResponseCode());
             if (con.getResponseCode() == 201) {
                 BufferedReader in = new BufferedReader(
                         new InputStreamReader(con.getInputStream()));
@@ -129,6 +130,9 @@ public class ConnectionHttps implements Serializable {
             return "{\"192\":\"\",\"11\":\"" + date + "\",\"122.17\":true,\"122.18\":\"\",\"RESULT\":[{\"101\":\"\",\"39\":\"9999\",\"44\":\"Unknown\",\"RESULT\":[{}]}]}";
         } catch (KeyManagementException e) {
             // TODO Auto-generated catch block
+            e.printStackTrace();
+            return "{\"192\":\"\",\"11\":\"" + date + "\",\"122.17\":true,\"122.18\":\"\",\"RESULT\":[{\"101\":\"\",\"39\":\"9999\",\"44\":\"Unknown\",\"RESULT\":[{}]}]}";
+        } catch(Exception e) {
             e.printStackTrace();
             return "{\"192\":\"\",\"11\":\"" + date + "\",\"122.17\":true,\"122.18\":\"\",\"RESULT\":[{\"101\":\"\",\"39\":\"9999\",\"44\":\"Unknown\",\"RESULT\":[{}]}]}";
         }

@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.polo.surixondemo.controller;
+package com.nmc.controller;
 
-import com.polo.surixondemo.model.Category;
+import com.nmc.connection.DataService;
+import com.nmc.model.Category;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +31,6 @@ public class CategoriesController {
 
     private String selectedCategory;
 
-
     public CategoriesController() {
 
         categories = new ArrayList<String>();
@@ -39,9 +39,11 @@ public class CategoriesController {
         categories.add("RSS");
         categories.add("Images");
 
+        DataService e = new DataService();
+        e.test();
+
     }
 
- 
     public List<String> getCategories() {
         return categories;
     }
@@ -49,8 +51,6 @@ public class CategoriesController {
     public void setCategories(List<String> categories) {
         this.categories = categories;
     }
-    
-    
 
     public List<String> getDroppedCategories() {
         return droppedCategories;
@@ -64,4 +64,4 @@ public class CategoriesController {
         this.selectedCategory = selectedCategory;
     }
 
- }
+}
