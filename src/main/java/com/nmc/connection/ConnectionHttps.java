@@ -28,6 +28,7 @@ import javax.net.ssl.TrustManagerFactory;
 import org.apache.commons.codec.binary.Base64;
 
 import com.nmc.utils.LoadUtilities;
+import org.apache.log4j.Logger;
 /*
  *
  * @(#)NMCClass.java 1.0 18/02/2014
@@ -56,6 +57,8 @@ public class ConnectionHttps implements Serializable {
     private static Date date = new Date();
     private static LoadUtilities ld = new LoadUtilities();
     private static Properties propeties = new Properties();
+    
+    private static final Logger LOG = Logger.getLogger(ConnectionHttps.class);
 
     static {
         javax.net.ssl.HttpsURLConnection.setDefaultHostnameVerifier(new javax.net.ssl.HostnameVerifier() {
@@ -77,6 +80,7 @@ public class ConnectionHttps implements Serializable {
      * @return
      */
     public static String doPost(String Url, String input) {
+        System.out.println("JSON request:" + input);
         input = new String(Base64.encodeBase64(input.getBytes()));
         propeties = ld.loadProperties();
         try {
@@ -101,10 +105,7 @@ public class ConnectionHttps implements Serializable {
             wr.writeBytes(input);
             wr.flush();
             wr.close();
-            String response = "";
-            
-            System.out.println(con.getResponseCode());
-            
+            String response = "";                       
             
             if (con.getResponseCode() == 201) {
                 BufferedReader in = new BufferedReader(
@@ -114,6 +115,7 @@ public class ConnectionHttps implements Serializable {
                     response += inputLine;
                 }
                 in.close();
+                System.out.println("JSON response:" + response);
             }
             return response;
         } catch (MalformedURLException e) {
@@ -135,10 +137,7 @@ public class ConnectionHttps implements Serializable {
             // TODO Auto-generated catch block
             e.printStackTrace();
             return "{\"192\":\"\",\"11\":\"" + date + "\",\"122.17\":true,\"122.18\":\"\",\"RESULT\":[{\"101\":\"\",\"39\":\"9999\",\"44\":\"Unknown\",\"RESULT\":[{}]}]}";
-        } catch(Exception e) {
-            e.printStackTrace();
-            return "{\"192\":\"\",\"11\":\"" + date + "\",\"122.17\":true,\"122.18\":\"\",\"RESULT\":[{\"101\":\"\",\"39\":\"9999\",\"44\":\"Unknown\",\"RESULT\":[{}]}]}";
-        }
+        } 
     }
 
 }

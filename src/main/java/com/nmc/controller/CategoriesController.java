@@ -35,13 +35,10 @@ public class CategoriesController {
 
         categories = new ArrayList<String>();
         categories.add("Videos");
-        categories.add("Weather");
-        categories.add("RSS");
+        categories.add("Items");
         categories.add("Images");
 
-        DataServiceFactory e = new DataServiceFactory();
-        e.test();
-
+   
     }
 
     public List<String> getCategories() {

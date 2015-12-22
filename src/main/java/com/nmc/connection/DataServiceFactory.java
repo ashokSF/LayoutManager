@@ -8,8 +8,11 @@ package com.nmc.connection;
 import com.nmc.utils.OperationEnum;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.TimeZone;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -44,16 +47,49 @@ public class DataServiceFactory {
     public static final String FN_ORDER_ASC = "ASC";
     public static final String SERVER_DATE_FORMAT = "MM-dd-yyyy KK:mm:ss.SSS Z";
 
-    public void test() {
-        String input = buildJsonToServer();
-        
-        System.out.println(input);
+    private static final Logger LOG = Logger.getLogger(DataServiceFactory.class);
+
+    public static void getAdvertisingItem() {
+
+        HashMap<String, String> params = new HashMap();
+        HashMap<String, String> filters = new HashMap();
+
+        params.put(FN_USER_ID, "0001202A000000001054");
+
+        String input = buildJsonToServer(OperationEnum.GET_ADVERTISING_ITEM.toString(), params, filters);
+
         String out = ConnectionHttps.doPost(defaultServer, input);
 
-        System.out.println("Response " + out);
     }
 
-    private String buildJsonToServer() {
+    public static void getAdvertisingImage() {
+
+        HashMap<String, String> params = new HashMap();
+        HashMap<String, String> filters = new HashMap();
+
+        filters.put(FN_USER_ID, "0001202A000000001054");
+        filters.put("operator", "eq");
+
+        String input = buildJsonToServer(OperationEnum.GET_ADVERTISING_IMAGE.toString(), params, filters);
+
+        String out = ConnectionHttps.doPost(defaultServer, input);
+
+    }
+
+    public static void getAdvertisingVideo() {
+
+        HashMap<String, String> params = new HashMap();
+        HashMap<String, String> filters = new HashMap();
+
+        filters.put(FN_USER_ID, "0001202A000000001054");
+        filters.put("operator", "eq");
+
+        String input = buildJsonToServer(OperationEnum.GET_ADVERTISING_VIDEO.toString(), params, filters);
+
+        String out = ConnectionHttps.doPost(defaultServer, input);
+    }
+
+    private static String buildJsonToServer(String operation, HashMap<String, String> params, HashMap<String, String> filters) {
         StringBuilder str = new StringBuilder("{ ");
         str.append("\"").append(FN_SECURITY_TOKEN_NAME).append("\":");
         str.append("\"").append(FN_SECURITY_TOKEN_VALUE).append("\",");
@@ -65,30 +101,56 @@ public class DataServiceFactory {
         str.append("\"").append("es").append("\",");
 
         str.append("\"").append(FN_OPLIST_NAME).append("\":[");
-        
-        str = buildJsonOperation(str);
+
+        str = buildJsonOperation(str, operation, params, filters);
 
         str.append("]}");
         return str.toString();
     }
-    
-    private StringBuilder buildJsonOperation(StringBuilder str) {
+
+    private static StringBuilder buildJsonOperation(StringBuilder str, String operation, HashMap<String, String> params, HashMap<String, String> filters) {
         // str.append(operationToJSON(operationData));
         str.append("{");
         str.append("\"").append(FN_OPERATION_NAME).append("\":");
-        str.append("\"").append(OperationEnum.GET_ADVERTISING_ITEM).append("\",");    
-        
-        
+        str.append("\"").append(operation).append("\",");
+
         //Operation PARAMS
         str.append("\"").append(FN_PARAMS_NAME).append("\":");
         str.append("{");
-        str.append("\"").append(FN_USER_ID).append("\":");
-        str.append("\"").append("0001202A000000001054").append("\"");           
-        str.append("}");     
-        
-        
+
+        Iterator<Map.Entry<String, String>> param = params.entrySet().iterator();
+        while (param.hasNext()) {
+            Map.Entry<String, String> entry = param.next();
+            str.append("\"").append((String) entry.getKey()).append("\":");
+            str.append("\"").append((String) entry.getValue()).append("\"");
+            if (param.hasNext()) {
+                str.append(",");
+            }
+        }
+        str.append("}");
+
+        //Operation FILTERS
+        Iterator<Map.Entry<String, String>> filter = filters.entrySet().iterator();
+        if (filter.hasNext()) {
+
+            str.append(",");
+            str.append("\"").append(FN_FILTER_NAME).append("\":[{");
+
+            while (filter.hasNext()) {
+                Map.Entry<String, String> entry = filter.next();
+                str.append("\"").append((String) entry.getKey()).append("\":");
+                str.append("\"").append((String) entry.getValue()).append("\"");
+                if (filter.hasNext()) {
+                    str.append(",");
+                }
+            }
+
+            str.append("}]");
+
+        }
+
         str.append("}"); //Operation end     
-        
+
         return str;
     }
 

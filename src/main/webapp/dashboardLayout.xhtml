@@ -90,8 +90,13 @@
 
             </p:droppable>
 
-            <p:layoutUnit header="Properties" position="east" size="200" collapsible="false">
+            <p:layoutUnit header="Properties" position="east" size="400" collapsible="false">
+                
+                <p:dataGrid id="Images" var="img" value="#{imageController.image_list}" columns="1">
+                    <p:panel id="pnl" header="#{img.url}" style="text-align:center">
 
+                    </p:panel>
+                </p:dataGrid>
 
             </p:layoutUnit>
 
