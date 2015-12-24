@@ -28,6 +28,8 @@ $(function () {
         serialize_params: function ($w, wgd) {
             return {
                 id: $($w).attr('id'),
+                height: $($w).attr('height'),
+                width: $($w).attr('width'),
                 col: wgd.col,
                 row: wgd.row,
                 size_x: wgd.size_x,
@@ -65,7 +67,7 @@ $(document).on("click", "#gridster .delete-button",
 
 $(function () {
 
-    $('#gridsterForm\\:previewTab\\:preview').click(function (event) {
+    $('#gridsterForm\\:preview').click(function (event) {
 
         event.preventDefault();
 
@@ -92,6 +94,10 @@ $(function () {
                         
 
                         var hidden = document.getElementById("gridsterForm:serializedData");
+                        
+                        alert(hidden.value);
+                        
+                        hidden.value
                         hidden.value = JSON.stringify(js);
                         
                         $(this).dialog("destroy");

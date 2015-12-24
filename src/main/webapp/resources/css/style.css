@@ -67,3 +67,11 @@ body {
     background: red!important;
 }
 
+.ui-datagrid {
+    border-width: 0;
+}
+
+.ui-tab-panels{
+    border-width: 0;
+}
+

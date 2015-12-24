@@ -15,25 +15,29 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import javax.inject.Inject;
 import org.apache.log4j.Logger;
-
-
+import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.UploadedFile;
 
 @ManagedBean
 @RequestScoped
 public class ImageController {
-    
+
     public static final String IMAGEIMAGE_PATH = "http://100.43.205.74:4224/ServerImage/images/";
     private static final Logger LOG = Logger.getLogger(ImageController.class);
-    
+
     private Image image;
-        
+
     private ArrayList<Image> image_list;
 
     /**
      * Creates a new instance of ImageController
      */
     public ImageController() {
-        image_list = DataServiceFactory.getAdvertisingImage();
+        //image_list = DataServiceFactory.getAdvertisingImage();
+    }
+
+    public void upload(FileUploadEvent event) {
+    
     }
 
     public Image getImage() {
@@ -50,11 +54,10 @@ public class ImageController {
 
     public void setImage_list(ArrayList<Image> image_list) {
         this.image_list = image_list;
-    }   
-    
+    }
+
     public String getImageUrlBase() {
         return IMAGEIMAGE_PATH;
     }
-    
-    
+
 }

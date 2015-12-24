@@ -14,6 +14,15 @@
         <url-pattern>/faces/*</url-pattern>
     </servlet-mapping>
     
+    <filter>
+        <filter-name>primeFacesFileUploadFilter</filter-name>
+        <filter-class>org.primefaces.webapp.filter.FileUploadFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>primeFacesFileUploadFilter</filter-name>
+        <servlet-name>facesServlet</servlet-name>
+    </filter-mapping>    
+    
     <context-param> 
         <param-name>javax.faces.PARTIAL_STATE_SAVING</param-name> 
         <param-value>false</param-value> 

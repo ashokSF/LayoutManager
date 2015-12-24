@@ -48,8 +48,9 @@
 
             </p:layoutUnit>
 
-            <p:layoutUnit position="west" size="300" collapsible="false" header="Categories">
-                <p:dataGrid id="availableCategories" var="category" value="#{categoriesController.categories}" columns="1">
+            <p:layoutUnit position="west" size="200" collapsible="false" header="Categories">
+
+                <p:dataGrid id="availableCategories" var="category" value="#{categoriesController.categories}" columns="1" styleClass="panel-no-border">
                     <p:panel id="pnl" header="#{category}" style="text-align:center">
 
                     </p:panel>
@@ -58,27 +59,23 @@
 
             </p:layoutUnit>
 
-            <p:layoutUnit position="center" id="dropArea">
+            <p:layoutUnit position="center" id="dropArea" header="Stage">
                 <h:form id="gridsterForm" onSubmit="return false;">
 
                     <p:growl id="growl" />
 
-                    <p:tabView id="previewTab" style="border: none!important;">
-                        <p:tab title="Layout Editor">
-                            <p:layout fullPage="true">
+                    <p:layout fullPage="true">
 
+                        <p:commandButton id="preview" value="Preview" icon="ui-icon-search"/>
 
-                                <p:commandButton id="preview" value="Preview" icon="ui-icon-search"/>
+                        <br/>
+                        <br/>
 
-                                <div id="gridster" class="gridster" style="width: 1000; height: 500; alignment-adjust: central;" >
-                                    <ul>
-                                    </ul>
-                                </div>
-                            </p:layout>
-
-                        </p:tab>
-                    </p:tabView>
-
+                        <div id="gridster" class="gridster" style="width: 600; height: 500; alignment-adjust: central;" >
+                            <ul>
+                            </ul>
+                        </div>
+                    </p:layout>
 
                     <h:inputHidden id="serializedData" />
 
@@ -90,13 +87,37 @@
 
             </p:droppable>
 
-            <p:layoutUnit header="Properties" position="east" size="500" collapsible="false">
+            <p:layoutUnit header="Properties" position="east" size="600" collapsible="false">
+                <h:form id="propForm">
+                    <p:tabView>
+                        <p:tab title="Playlists">
 
-                <p:dataGrid id="Images" var="img" value="#{imageController.image_list}" columns="1">
+
+                        </p:tab>
+
+                        <p:tab title="Order">
 
 
-                    <img src="#{imageController.imageUrlBase}#{img.name}" width="150" height="150" />
-                </p:dataGrid>
+                        </p:tab>
+                        <p:tab title="Info">
+
+                            <p:dataGrid id="Images" var="img" value="#{imageController.image_list}" columns="2" styleClass="panel-no-border">
+
+
+                                <img src="#{imageController.imageUrlBase}#{img.name}" width="200" height="150" />
+                            </p:dataGrid>
+
+                        </p:tab>
+
+                        <p:tab title="Related">
+
+
+
+                        </p:tab>
+
+                    </p:tabView>
+
+                </h:form>
 
             </p:layoutUnit>
 

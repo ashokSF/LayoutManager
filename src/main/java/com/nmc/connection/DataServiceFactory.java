@@ -6,6 +6,8 @@
 package com.nmc.connection;
 
 import com.nmc.model.Image;
+import com.nmc.model.Item;
+import com.nmc.model.Video;
 import com.nmc.utils.OperationEnum;
 import com.nmc.utils.json.KeyFinder;
 import java.text.SimpleDateFormat;
@@ -63,71 +65,87 @@ public class DataServiceFactory {
     public static final String RS_IMAGE_ID = "120.86";
     public static final String RS_IMAGE_NAME = "121.170";
 
+    //Video response
+    public static final String RS_VIDEO_FILE_ID = "125.50";
+    public static final String RS_VIDEO_TITLE = "48.6";
+    public static final String RS_VIDEO_FO_NAME = "121.15";
+    public static final String RS_VIDEO_THUMB= "47.42";
+    
+    //Items response
+    public static final String RS_ITEM_PRODUCT_ID = "114.144";
+    public static final String RS_ITEM_PRODUCT_TYPE_ID = "114.112"; 
+
     private static final Logger LOG = Logger.getLogger(DataServiceFactory.class);
 
-    public static void getAdvertisingItem() {
+    public static ArrayList<Item> getAdvertisingItem() {
 
-        HashMap<String, String> params = new HashMap();
-        HashMap<String, String> filters = new HashMap();
+        ArrayList<Item> item_list = new ArrayList();
 
-        params.put(FN_USER_ID, "0001202A000000001054");
+        OperationData operationData = new OperationData(OperationEnum.GET_ADVERTISING_VIDEO.toString());
+        operationData.setParam(FN_USER_ID, "0001202A000000001054");
 
-        String input = buildJsonToServer(OperationEnum.GET_ADVERTISING_ITEM.toString(), params, filters);
+        System.out.println(JSONArray.toJSONString(sendOperation(operationData)));
 
-        String out = ConnectionHttps.doPost(defaultServer, input);
+        return item_list;
 
     }
 
     public static ArrayList<Image> getAdvertisingImage() {
 
-        HashMap<String, String> params = new HashMap();
-        HashMap<String, String> filters = new HashMap();
-        
         ArrayList<Image> image_list = new ArrayList();
 
-        filters.put(FN_USER_ID, "0001202A000000001054");
-        filters.put("operator", "eq");
+        OperationData operationData = new OperationData(OperationEnum.GET_ADVERTISING_IMAGE.toString());
+        operationData.setFilter(FN_USER_ID, "0001202A000000001054");
+        operationData.setFilter("operator", "eq");
 
-        String input = buildJsonToServer(OperationEnum.GET_ADVERTISING_IMAGE.toString(), params, filters);
+        for (Object img : sendOperation(operationData)) {
+            Image image = new Image();
+            image.setId((String) ((JSONObject) img).get(RS_IMAGE_ID));
+            image.setName((String) ((JSONObject) img).get(RS_IMAGE_NAME));
+            image_list.add(image);
+        }
 
-        String jsonResponse = ConnectionHttps.doPost(defaultServer, input);
+        return image_list;
+
+    }
+
+    public static ArrayList<Video> getAdvertisingVideo() {
+
+        ArrayList<Video> video_list = new ArrayList();
+
+        OperationData operationData = new OperationData(OperationEnum.GET_ADVERTISING_VIDEO.toString());
+        operationData.setFilter(FN_USER_ID, "0001202A000000001054");
+        operationData.setFilter("operator", "eq");
+
+        System.out.println(JSONArray.toJSONString(sendOperation(operationData)));
+
+        return video_list;
+    }
+
+    private static JSONArray sendOperation(OperationData operationData) {
+
+        String jsonRequest = buildJsonToServer(operationData.getOperation(), operationData.getParams(), operationData.getFilters());
+
+        String jsonResponse = ConnectionHttps.doPost(defaultServer, jsonRequest);
+
         JSONParser parser = new JSONParser();
-        
+
         JSONArray result_array = null;
 
         try {
             JSONObject obj = (JSONObject) parser.parse(jsonResponse);
             JSONArray result = (JSONArray) obj.get(FN_RESULT_NAME);
             for (Object nest : result) {
-                result_array =  (JSONArray)((JSONObject) nest).get(FN_RESULT_NAME);
+                result_array = (JSONArray) ((JSONObject) nest).get(FN_RESULT_NAME);
             }
 
-            for (Object img : result_array) {
-                Image image = new Image();
-                image.setId((String)((JSONObject) img).get(RS_IMAGE_ID));
-                image.setName((String)((JSONObject) img).get(RS_IMAGE_NAME));
-                image_list.add(image);
-            }
+            operationData.setResults(result_array);
 
         } catch (ParseException pe) {
             pe.printStackTrace();
         }
-        
-        return image_list;
 
-    }
-
-    public static void getAdvertisingVideo() {
-
-        HashMap<String, String> params = new HashMap();
-        HashMap<String, String> filters = new HashMap();
-
-        filters.put(FN_USER_ID, "0001202A000000001054");
-        filters.put("operator", "eq");
-
-        String input = buildJsonToServer(OperationEnum.GET_ADVERTISING_VIDEO.toString(), params, filters);
-
-        String out = ConnectionHttps.doPost(defaultServer, input);
+        return operationData.getResults();
     }
 
     private static String buildJsonToServer(String operation, HashMap<String, String> params, HashMap<String, String> filters) {
