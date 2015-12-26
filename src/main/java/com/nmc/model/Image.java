@@ -7,13 +7,15 @@ package com.nmc.model;
 
 /**
  *
- * @author Иван
+ * @author Poleschuk Ivan
  */
 public class Image {
-    
+
     private String name;
-    
+
     private String id;
+
+    private boolean inPlay;
 
     public String getName() {
         return name;
@@ -31,6 +33,12 @@ public class Image {
         this.id = id;
     }
 
-    
-    
+    public boolean isInPlay() {
+        return inPlay;
+    }
+
+    public void setInPlay(boolean inPlay) {
+        this.inPlay = inPlay;
+    }
+
 }

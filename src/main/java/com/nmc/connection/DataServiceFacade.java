@@ -20,6 +20,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
+import javax.inject.Inject;
 import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -32,9 +33,10 @@ import org.json.simple.parser.ParseException;
  *
  * @author jose
  */
-public class DataServiceFactory {
+public class DataServiceFacade {
 
     private static String defaultServer = "https://100.43.205.74:8095/NmcServerS/nmc-server/post/";
+    private static final String IMAGEIMAGE_PATH = "http://100.43.205.74:4224/ServerImage/images/";
 
     public static final String FN_SECURITY_TOKEN_NAME = "192";
     public static final String FN_SECURITY_TOKEN_VALUE = "8f09eaddb545ff7c94b3c7106eede716";
@@ -69,13 +71,14 @@ public class DataServiceFactory {
     public static final String RS_VIDEO_FILE_ID = "125.50";
     public static final String RS_VIDEO_TITLE = "48.6";
     public static final String RS_VIDEO_FO_NAME = "121.15";
-    public static final String RS_VIDEO_THUMB= "47.42";
-    
+    public static final String RS_VIDEO_THUMB = "47.42";
+
     //Items response
     public static final String RS_ITEM_PRODUCT_ID = "114.144";
-    public static final String RS_ITEM_PRODUCT_TYPE_ID = "114.112"; 
+    public static final String RS_ITEM_PRODUCT_TYPE_ID = "114.112";
 
-    private static final Logger LOG = Logger.getLogger(DataServiceFactory.class);
+    @Inject
+    Logger LOG;
 
     public static ArrayList<Item> getAdvertisingItem() {
 
@@ -101,7 +104,7 @@ public class DataServiceFactory {
         for (Object img : sendOperation(operationData)) {
             Image image = new Image();
             image.setId((String) ((JSONObject) img).get(RS_IMAGE_ID));
-            image.setName((String) ((JSONObject) img).get(RS_IMAGE_NAME));
+            image.setName(IMAGEIMAGE_PATH + (String) ((JSONObject) img).get(RS_IMAGE_NAME));
             image_list.add(image);
         }
 

@@ -1,10 +1,10 @@
 .gridster * {
-  margin:0;
-  padding:0;
+    margin:0;
+    padding:0;
 }
 
 ul {
-  list-style-type: none;
+    list-style-type: none;
 }
 
 
@@ -29,7 +29,7 @@ body {
 /*/
 
 .gridster ul {
-   background: EFEFEF; 
+    background: EFEFEF; 
 }
 
 .gridster li {
@@ -67,11 +67,17 @@ body {
     background: red!important;
 }
 
-.ui-datagrid {
-    border-width: 0;
+.ui-widget {
+    font-size:80% !important;
 }
 
-.ui-tab-panels{
-    border-width: 0;
+.customPanel > .ui-panel-titlebar {
+    font-size: 80%;
+    border: none!important;
+    text-align: center;
 }
 
+.gridNoBorder.ui-panelgrid>*>tr,
+.gridNoBorder.ui-panelgrid .ui-panelgrid-cell {
+    border: none;
+}

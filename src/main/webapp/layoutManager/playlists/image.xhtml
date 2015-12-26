@@ -1,0 +1,33 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <h:form id="imagePlayForm">
+
+        <p:dataGrid id="Images" var="img" value="#{imageController.image_list}" columns="2" styleClass="panel-no-border">
+
+            <p:panel id="imagePlay" header="Image:#{img.id}" styleClass="playListPanel">
+                <p:panelGrid styleClass="gridNoBorder" >
+                    <p:row>
+                        <p:column rowspan="2">
+                            <img src="#{img.name}" width="140" height="100" />
+                        </p:column>
+                        <p:column>
+                            <p:selectBooleanCheckbox value="#{img.inPlay}" class="playListAddCheck" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:commandButton value="Related" icon="ui-icon-star" />
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+            </p:panel>
+        </p:dataGrid>
+
+    </h:form>
+
+</ui:composition>

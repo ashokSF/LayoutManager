@@ -5,35 +5,44 @@
  */
 package com.nmc.controller;
 
-import com.nmc.connection.DataServiceFactory;
+import com.nmc.connection.DataServiceFacade;
 import com.nmc.model.Image;
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.RequestScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.inject.Named;
 import org.apache.log4j.Logger;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
 
-@ManagedBean
+/**
+ *
+ * @author Poleschuk Ivan
+ */
+
+@Named
 @RequestScoped
 public class ImageController {
-
-    public static final String IMAGEIMAGE_PATH = "http://100.43.205.74:4224/ServerImage/images/";
-    private static final Logger LOG = Logger.getLogger(ImageController.class);
+    
+    @Inject
+    Logger LOG;
 
     private Image image;
 
-    private ArrayList<Image> image_list;
+    private ArrayList<Image> image_list = new ArrayList();
 
     /**
      * Creates a new instance of ImageController
      */
     public ImageController() {
-        //image_list = DataServiceFactory.getAdvertisingImage();
+        //image_list = DataServiceFacade.getAdvertisingImage();
+        for (int i = 1; image_list.size() < 10; i++ ) {
+            Image img = new Image();
+            img.setId(String.valueOf(i));
+            img.setName("/SurixonDemo/resources/images/icnCamara.png");
+            image_list.add(img);
+        }        
     }
 
     public void upload(FileUploadEvent event) {
@@ -56,8 +65,6 @@ public class ImageController {
         this.image_list = image_list;
     }
 
-    public String getImageUrlBase() {
-        return IMAGEIMAGE_PATH;
-    }
-
+    
+ 
 }

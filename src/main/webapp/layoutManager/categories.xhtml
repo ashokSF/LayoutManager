@@ -1,0 +1,15 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core">
+    
+    <p:dataGrid id="availableCategories" var="category" value="#{categoriesController.categories}" columns="1" styleClass="panel-no-border">
+        <p:panel id="pnl" header="#{category}" styleClass="customPanel">
+
+        </p:panel>
+        <p:draggable for="pnl" revert="true" helper="clone" />
+    </p:dataGrid>
+
+</ui:composition>

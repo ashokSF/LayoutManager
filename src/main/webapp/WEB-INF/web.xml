@@ -11,7 +11,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
-        <url-pattern>/faces/*</url-pattern>
+        <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
     
     <filter>
@@ -39,6 +39,6 @@
         </session-timeout>
     </session-config>
     <welcome-file-list>
-        <welcome-file>faces/dashboardLayout.xhtml</welcome-file>
+        <welcome-file>layoutManager/main.xhtml</welcome-file>
     </welcome-file-list>
 </web-app>

@@ -5,30 +5,25 @@
  */
 package com.nmc.controller;
 
-import com.nmc.connection.DataServiceFactory;
+import com.nmc.connection.DataServiceFacade;
 import com.nmc.model.Image;
-import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.inject.Inject;
+import javax.inject.Named;
 import org.apache.log4j.Logger;
 
 /**
  *
- * @author Иван
+ * @author Poleschuk Ivan
  */
-@ManagedBean
+@Named
 @RequestScoped
 public class ItemController {
 
     @Inject
-    DataServiceFactory dsf;
+    DataServiceFacade dsf;
 
-    private static final Logger LOG = Logger.getLogger(ItemController.class);
-    
-
-    
-    
-    
-    
+    @Inject
+    Logger LOG;
 
 }

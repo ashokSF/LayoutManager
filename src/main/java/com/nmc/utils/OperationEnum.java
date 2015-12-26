@@ -7,7 +7,7 @@ package com.nmc.utils;
 
 /**
  *
- * @author Иван
+ * @author Poleschuk Ivan
  */
 public enum OperationEnum {
 

@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+ Copyright (C) 2013 Alex Chavez <alex@alexchavez.net>
+ California State University Long Beach (CSULB) ALL RIGHTS RESERVED
+-->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <h:head>
+        <style type="text/css">
+            .ui-layout-west {
+                z-index: 20 !important;
+                overflow: visible;
+            }
+
+            .ui-layout-west .ui-layout-unit-content {
+                overflow: visible;
+            }
+        </style>
+
+        <h:outputScript library="primefaces" name="jquery/jquery.js" target="head"/>
+        <h:outputScript library="primefaces" name="jquery/jquery-plugins.js" target="head"/>
+        <h:outputScript library="js" name="jquery-ui.js" target="head"/>
+        <h:outputScript library="js" name="jquery-ui.min.js" target="head"/>
+
+
+        <h:outputStylesheet library="css" name="jquery.gridster.css" />
+        <h:outputStylesheet library="css" name="style.css" />
+        
+        <h:outputScript library="js" name="jquery.gridster.js" target="head"/>
+        <h:outputScript library="js" name="CategoryGridster.js" target="head"/>   
+
+
+    </h:head>
+
+    <h:body>
+        <p:layout fullPage="true">
+
+            <p:layoutUnit position="north" size="100" resizable="true" closable="true" collapsible="true">
+
+            </p:layoutUnit>
+
+            <p:layoutUnit position="west" size="100" collapsible="false" header="Categories">
+
+                <ui:insert name="categoryList" />
+ 
+            </p:layoutUnit>
+
+            <p:layoutUnit position="center" id="dropArea" header="Stage" size="400">
+                <ui:insert name="layoutStage" />
+
+            </p:layoutUnit>
+            <p:droppable for="dropArea" tolerance="touch" activeStyleClass="ui-state-highlight" datasource="availableCategories" onDrop="handleDrop" >
+
+            </p:droppable>
+
+            <p:layoutUnit header="#{propHeader}" position="east" size="600" collapsible="false">
+                <ui:insert name="properies" />
+
+            </p:layoutUnit>
+
+
+        </p:layout>
+
+    </h:body>
+</html>

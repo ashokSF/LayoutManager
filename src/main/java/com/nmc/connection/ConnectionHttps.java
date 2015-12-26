@@ -28,6 +28,7 @@ import javax.net.ssl.TrustManagerFactory;
 import org.apache.commons.codec.binary.Base64;
 
 import com.nmc.utils.LoadUtilities;
+import javax.inject.Inject;
 import org.apache.log4j.Logger;
 /*
  *
@@ -58,7 +59,8 @@ public class ConnectionHttps implements Serializable {
     private static LoadUtilities ld = new LoadUtilities();
     private static Properties propeties = new Properties();
     
-    private static final Logger LOG = Logger.getLogger(ConnectionHttps.class);
+    @Inject
+    Logger LOG;
 
     static {
         javax.net.ssl.HttpsURLConnection.setDefaultHostnameVerifier(new javax.net.ssl.HostnameVerifier() {

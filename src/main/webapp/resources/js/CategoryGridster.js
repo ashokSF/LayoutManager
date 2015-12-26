@@ -63,6 +63,15 @@ $(document).on("click", "#gridster .delete-button",
         }
 );
 
+$(document).on("click", ".playListAddCheck",
+        function () {
+            var panelBackGround = $(".playListPanel");
+            panelBackGround.style.borderColor='#00FF00';
+            panelBackGround.css('background-color', 'yellow!important');
+            return false;
+        }
+);
+
 
 
 $(function () {

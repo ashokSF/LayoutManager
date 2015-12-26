@@ -5,25 +5,30 @@
  */
 package com.nmc.controller;
 
-import com.nmc.connection.DataServiceFactory;
+import com.nmc.connection.DataServiceFacade;
 import com.nmc.model.Category;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import javax.faces.bean.ManagedBean;
-import javax.faces.application.Application;
-import javax.faces.bean.RequestScoped;
-import javax.faces.context.FacesContext;
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
+import org.apache.log4j.Logger;
 import org.primefaces.component.panel.Panel;
 import org.primefaces.component.resizable.Resizable;
 
-/**
+/*
  *
- * @author Иван
+ * @author Poleschuk Ivan
  */
-@ManagedBean
+
+
+@Named
 @RequestScoped
 public class CategoriesController {
+    
+    @Inject
+    Logger LOG;
 
     private List<String> categories;
 
@@ -32,8 +37,8 @@ public class CategoriesController {
     private String selectedCategory;
 
     public CategoriesController() {
-
-        categories = new ArrayList<String>();
+        
+        categories = new ArrayList();
         categories.add("Videos");
         categories.add("Items");
         categories.add("Images");

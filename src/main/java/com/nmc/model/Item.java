@@ -7,7 +7,7 @@ package com.nmc.model;
 
 /**
  *
- * @author Иван
+ * @author Poleschuk Ivan
  */
 public class Item {
     
