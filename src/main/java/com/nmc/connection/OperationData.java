@@ -10,7 +10,7 @@ import org.json.simple.JSONArray;
 
 /**
  *
- * @author Иван
+ * @author Poleschuk Ivan
  */
 public class OperationData {
 

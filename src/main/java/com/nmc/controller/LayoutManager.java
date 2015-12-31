@@ -7,46 +7,46 @@ package com.nmc.controller;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
+import com.nmc.model.Playlist;
+import java.io.Serializable;
+import java.util.HashMap;
+import javax.enterprise.context.SessionScoped;
 
 /**
  *
  * @author Poleschuk Ivan
  */
-
-
 @Named
-@RequestScoped
-public class LayoutManager {
-    
-    private String playlist;
-    
-    private String playListName;
-    
-    
-    @PostConstruct
-    public void init() {
-        setPlaylist("playlists/image.xhtml");
-        setPlayListName("Image playlist");
+@SessionScoped
+public class LayoutManager implements Serializable{
+
+    private Playlist currentPlaylist;
+    private static HashMap<String, Playlist> layout_map = new HashMap();
+
+    static {
+
+        layout_map.put("Editor", new Playlist("Editor"));
+        layout_map.put("Images", new Playlist("Images"));
+        layout_map.put("Videos", new Playlist("Videos"));
+        layout_map.put("Items", new Playlist("Items"));
     }
 
-    public String getPlaylist() {
-        return playlist;
+    public LayoutManager() {
+        currentPlaylist = layout_map.get("Editor");
     }
 
-    public void setPlaylist(String playlist) {
-        this.playlist = playlist;
+    public void setCurrentPlaylist(String type) {
+        currentPlaylist = layout_map.get(type);
     }
 
-    public String getPlayListName() {
-        return playListName;
+    public String getUrl() {
+        return currentPlaylist.getUrl();
     }
 
-    public void setPlayListName(String playListName) {
-        this.playListName = playListName;
+    public String getHeader() {
+        return currentPlaylist.getHeader();
     }
-    
-    
-       
-    
+
 }

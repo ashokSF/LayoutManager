@@ -5,13 +5,20 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://java.sun.com/jsf/core">
 
-    <h:form id="gridsterForm" onSubmit="return false;">
+    <h:form id="gridsterForm" prependId="false">
 
         <p:growl id="growl" />
 
         <p:layout fullPage="true">
 
-            <p:commandButton id="preview" value="Preview" icon="ui-icon-search"/>
+            <p:menubar>
+                <p:menuitem value="Preview" icon="ui-icon-search" onclick="showPreviewDialog();" />
+                <p:menuitem value="Save" icon="ui-icon-disk" onclick="serializeGridster(); document.getElementById('invisibleClickTarget').click(); return false;" />
+            </p:menubar>
+
+            <ui:remove>
+                <p:commandButton id="preview" value="Preview" icon="ui-icon-search"/>
+            </ui:remove>
 
             <br/>
             <br/>
@@ -20,9 +27,16 @@
                 <ul>
                 </ul>
             </div>
+
         </p:layout>
 
-        <h:inputHidden id="serializedData" />
+        <h:inputHidden id="serializedData" value="#{stageController.jsonModel}" />
+        <h:inputHidden id="layoutLength" value="#{stageController.layoutLength}" />
+        <h:inputHidden id="layoutWidth" value="#{stageController.layoutWidth}" />
+
+        <h:commandButton id="invisibleClickTarget" style="display: none!important;">
+            <f:ajax execute="@form" listener="#{stageController.saveStage}" />
+        </h:commandButton>
 
     </h:form>
 

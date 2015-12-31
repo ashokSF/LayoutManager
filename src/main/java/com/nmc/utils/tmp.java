@@ -3,22 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.nmc.model;
+package com.nmc.utils;
 
 /**
  *
  * @author Poleschuk Ivan
  */
-public class User {
-    String userId;
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-    
+public class tmp {
     
 }

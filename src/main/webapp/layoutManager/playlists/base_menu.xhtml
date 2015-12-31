@@ -5,7 +5,10 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://java.sun.com/jsf/core">
 
-    <ui:include src="base_menu.xhtml" />
+    <p:menubar>
+        <p:menuitem value="Save" icon="ui-icon-disk" />
+        <p:menuitem value="Back" actionListener="#{layoutManager.setCurrentPlaylist('Editor')}" update="propForm" icon="ui-icon-arrowreturnthick-1-w" />
+    </p:menubar>
 
 
 </ui:composition>

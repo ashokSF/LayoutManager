@@ -13,9 +13,11 @@
     <ui:define name="layoutStage">
         <ui:include src="stage.xhtml" />
     </ui:define>
-    
-    <ui:param name="propHeader" value="#{layoutManager.playListName}" />
+
+    <ui:param name="propHeader" value="Properties" />
     <ui:define name="properies">
-        <ui:include src="#{layoutManager.playlist}" />
+        <h:form id="propForm">           
+            <ui:include src="#{layoutManager.url}" />
+        </h:form>
     </ui:define>
 </ui:composition>

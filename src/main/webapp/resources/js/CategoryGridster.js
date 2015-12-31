@@ -1,16 +1,3 @@
-/* 
- *  Copyright (C) 2013 Alex Chavez <alex@alexchavez.net>
- *  California State University Long Beach (CSULB) ALL RIGHTS RESERVED
- * 
- *  Use of this software is authorized for CSULB students in Dr. Monge's classes, so long
- *  as this copyright notice remains intact. Students must request permission from Dr. Monge
- *  if the code is to be used in other venues outside of Dr. Monge's classes.
- * 
- *  This program is distributed to CSULB students in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * 
- */
 
 $ = jQuery;
 var gridster;
@@ -28,8 +15,6 @@ $(function () {
         serialize_params: function ($w, wgd) {
             return {
                 id: $($w).attr('id'),
-                height: $($w).attr('height'),
-                width: $($w).attr('width'),
                 col: wgd.col,
                 row: wgd.row,
                 size_x: wgd.size_x,
@@ -51,6 +36,21 @@ $(function () {
         }
     }).data('gridster');
 
+    //var hidden = document.getElementById("gridsterForm:serializedData");
+    try {
+        var serialization = JSON.parse($('#serializedData').val());
+    } catch (e) {
+        serialization = null;
+    }
+
+    if (serialization != null) {
+        //serialization = Gridster.sort_by_row_and_col(serialization);
+        gridster.remove_all_widgets();
+        $.each(serialization, function () {
+            var html = '<li id="' + this.id + '">' + this.id + '<button class="delete-button" style="float: right;">Delete</button></li>'
+            gridster.add_widget(html, this.size_x, this.size_y, this.col, this.row);
+        });
+    }
 
 });
 
@@ -63,15 +63,29 @@ $(document).on("click", "#gridster .delete-button",
         }
 );
 
-$(document).on("click", ".playListAddCheck",
-        function () {
-            var panelBackGround = $(".playListPanel");
-            panelBackGround.style.borderColor='#00FF00';
-            panelBackGround.css('background-color', 'yellow!important');
-            return false;
-        }
-);
+function showPreviewDialog() {
 
+    event.preventDefault();
+
+    var prGridster = $("#gridster").clone();
+    prGridster.attr("id", "prGridster");
+
+    newHeight = $("#gridster ul").outerHeight();
+    newWidth = $("#gridster ul").outerWidth();
+
+    prGridster.dialog({
+        width: (newWidth + 30),
+        height: (newHeight + 70),
+        helper: 'clone',
+        modal: false,
+        resizable: false,
+        title: "Layout preview",
+        draggable: false,
+        close: function (event, ui) {
+            $(this).dialog("destroy");
+        }
+    });
+}
 
 
 $(function () {
@@ -100,15 +114,13 @@ $(function () {
                     },
                     click: function () {
                         var js = gridster.serialize();
-                        
+
 
                         var hidden = document.getElementById("gridsterForm:serializedData");
-                        
-                        alert(hidden.value);
-                        
-                        hidden.value
+
+
                         hidden.value = JSON.stringify(js);
-                        
+
                         $(this).dialog("destroy");
                     }
                 }
@@ -119,9 +131,8 @@ $(function () {
         });
     }); //close click
 
-});
-
-
+}
+);
 function handleDrop(event, ui) {
     var droppedCat = ui.draggable.text(),
             helper = ui.helper,
@@ -132,11 +143,23 @@ function handleDrop(event, ui) {
 
     gridster.add_widget(html, 1, 1);
 
-    newHeight = $("#gridster ul").outerHeight();
-    newWidth = $("#gridster ul").outerWidth();
+    newHeight = $("#gridster").outerHeight();
+    newWidth = $("#gridster").outerWidth();
 
 }
 
+function serializeGridster() {
+
+    var js = gridster.serialize();
+
+    //var hidden = document.getElementById("serializedData");
+
+    //alert(JSON.stringify(js.to));
+
+    $('#serializedData').val(JSON.stringify(js));
+    $('#layoutLength').val(newHeight.toString());
+    $('#layoutWidth').val(newWidth.toString());
+}
 
 
 

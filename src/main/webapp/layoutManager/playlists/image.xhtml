@@ -5,29 +5,63 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://java.sun.com/jsf/core">
 
-    <h:form id="imagePlayForm">
+    <ui:include src="base_menu.xhtml" />
 
-        <p:dataGrid id="Images" var="img" value="#{imageController.image_list}" columns="2" styleClass="panel-no-border">
+    <p:dataGrid id="Images" var="img" value="#{imageController.image_list}" columns="1" styleClass="panel-no-border">
 
-            <p:panel id="imagePlay" header="Image:#{img.id}" styleClass="playListPanel">
-                <p:panelGrid styleClass="gridNoBorder" >
-                    <p:row>
-                        <p:column rowspan="2">
-                            <img src="#{img.name}" width="140" height="100" />
-                        </p:column>
-                        <p:column>
-                            <p:selectBooleanCheckbox value="#{img.inPlay}" class="playListAddCheck" />
-                        </p:column>
-                    </p:row>
-                    <p:row>
-                        <p:column>
-                            <p:commandButton value="Related" icon="ui-icon-star" />
-                        </p:column>
-                    </p:row>
-                </p:panelGrid>
-            </p:panel>
-        </p:dataGrid>
+        <ui:remove>
 
-    </h:form>
+            <div class="buttonAdvertaising" id="imagePlay" style="width=100px; height:135px; background-image: url(#{img.url}); background-size: 100% 100%;">
+            </div>
+
+
+        </ui:remove>
+
+
+        <p:commandLink actionListener="#{imageController.setCurrentEditingImage(img)}"  onclick="PF('AddImageDlg').show();">
+            <img src="#{img.url}" width="240px " height="135px" />
+        </p:commandLink>
+
+
+        <div>
+
+            <h:panelGrid columns="4">   
+                <p:selectBooleanCheckbox value="#{img.inPlay}"   class="playListAddCheck" />
+                <p:commandButton value="Up"  update=":propForm" style="font-size:80% !important;" 
+                                 actionListener="#{imageController.processUpOrder(img)}" 
+                                 icon="ui-icon-circle-arrow-n">
+                </p:commandButton>
+                <p:commandButton value="Down" update=":propForm" style="font-size:80% !important;" 
+                                 actionListener="#{imageController.processDownOrder(img)}"
+                                 icon="ui-icon-circle-arrow-s">
+                </p:commandButton>
+
+                <p:commandButton  value="Related" icon="ui-icon-star" style="font-size:80% !important;" onclick="return false" />
+            </h:panelGrid>
+        </div>
+
+
+
+        <p:dialog id="EditImageDlg" header="Edit image" draggable="false" resizable="false" widgetVar="AddImageDlg" modal="false" width="400" height="500">
+
+            <p:menubar style="font-size:80% !important; border: none!important; ">
+                <p:menuitem value="Save" icon="ui-icon-disk" />
+                <p:menuitem value="Back" onclick="PF('AddImageDlg').hide();"  icon="ui-icon-arrowreturnthick-1-w" />
+            </p:menubar>
+
+            <img src="#{imageController.currentEditingImage.url}" id="imagePlayEdit" width="240px " height="135px" />
+
+            <br/><br/>
+
+            <p:fileUpload id="singleFileUpload" required="true" uploadLabel="Upload"
+                          fileUploadListener="#{imageController.upload}" mode="advanced" update="EditImageDlg"
+                          auto="true" sizeLimit="100000"
+                          allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+
+        </p:dialog> 
+
+
+
+    </p:dataGrid>
 
 </ui:composition>

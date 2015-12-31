@@ -5,8 +5,11 @@
  */
 package com.nmc.connection;
 
+import com.nmc.model.CampaignLayout;
 import com.nmc.model.Image;
 import com.nmc.model.Item;
+import com.nmc.model.LayoutComponent;
+import com.nmc.model.NMCData;
 import com.nmc.model.Video;
 import com.nmc.utils.OperationEnum;
 import com.nmc.utils.json.KeyFinder;
@@ -31,12 +34,13 @@ import org.json.simple.parser.ParseException;
 
 /**
  *
- * @author jose
+ * @author Poleschuk Ivan
  */
 public class DataServiceFacade {
 
     private static String defaultServer = "https://100.43.205.74:8095/NmcServerS/nmc-server/post/";
     private static final String IMAGEIMAGE_PATH = "http://100.43.205.74:4224/ServerImage/images/";
+    private static final String VIDEO_PATH = "http://100.43.205.74:4224/ServerImage/videos/";
 
     public static final String FN_SECURITY_TOKEN_NAME = "192";
     public static final String FN_SECURITY_TOKEN_VALUE = "8f09eaddb545ff7c94b3c7106eede716";
@@ -77,15 +81,93 @@ public class DataServiceFacade {
     public static final String RS_ITEM_PRODUCT_ID = "114.144";
     public static final String RS_ITEM_PRODUCT_TYPE_ID = "114.112";
 
+    //Add layout
+    public static final String ADD_LAYOUT_ID = "123.11";
+    public static final String ADD_LAYOUT_CAMP_ID = "114.101";
+    public static final String ADD_LAYOUT_LENGTH = "123.12";
+    public static final String ADD_LAYOUT_WIDTH = "123.13";
+    public static final String ADD_LAYOUT_CC = "114.121";
+
+    public static final String ADD_LAYOUT_COMP_STRUCTURE = "CM";
+    public static final String ADD_LAYOUT_COMP_DIM_X = "123.14";
+    public static final String ADD_LAYOUT_COMP_DIM_Y = "123.15";
+    public static final String ADD_LAYOUT_COMP_HEIGHT = "123.16";
+    public static final String ADD_LAYOUT_COMP_WIDTH = "123.17";
+    public static final String ADD_LAYOUT_COMP_ID = "123.19";
+
     @Inject
     Logger LOG;
+
+    public static CampaignLayout getAdvertisingLayout() {
+
+        CampaignLayout layout = null;
+
+        OperationData operationData = new OperationData(OperationEnum.GET_CAMPAIGN_LAYOUT.toString());
+        operationData.setParam(FN_USER_ID, NMCData.getInstance().getMerchantId());
+        operationData.setParam(ADD_LAYOUT_CAMP_ID, NMCData.getInstance().getCampaignId());
+
+        JSONArray result = sendOperation(operationData);
+
+        if (result.size() > 0) {
+            JSONObject obj = (JSONObject) result.get(0);
+            layout = new CampaignLayout(
+                    String.valueOf(obj.get(ADD_LAYOUT_ID)),
+                    String.valueOf(obj.get(ADD_LAYOUT_LENGTH)),
+                    String.valueOf(obj.get(ADD_LAYOUT_WIDTH)),
+                    Integer.parseInt(String.valueOf(obj.get(ADD_LAYOUT_CC)))
+            );
+
+            JSONArray lcArray = (JSONArray) obj.get(ADD_LAYOUT_COMP_STRUCTURE);
+
+            for (Object lcObj : lcArray) {
+                LayoutComponent lc = new LayoutComponent(
+                        String.valueOf(((JSONObject) lcObj).get(ADD_LAYOUT_COMP_ID)),
+                        String.valueOf(((JSONObject) lcObj).get(ADD_LAYOUT_COMP_DIM_X)),
+                        String.valueOf(((JSONObject) lcObj).get(ADD_LAYOUT_COMP_DIM_Y)),
+                        String.valueOf(((JSONObject) lcObj).get(ADD_LAYOUT_COMP_HEIGHT)),
+                        String.valueOf(((JSONObject) lcObj).get(ADD_LAYOUT_COMP_WIDTH))
+                );
+                layout.addComponent(lc);
+            }
+        }
+
+        return layout;
+    }
+
+    public static void addAdvertisingLayout(CampaignLayout layout) {
+
+        OperationData operationData = new OperationData(OperationEnum.ADD_CAMPAIGN_LAYOUT.toString());
+        operationData.setParam(FN_USER_ID, NMCData.getInstance().getMerchantId());
+        operationData.setParam(ADD_LAYOUT_CAMP_ID, layout.getCampaignId());
+        operationData.setParam(ADD_LAYOUT_LENGTH, layout.getStageLength());
+        operationData.setParam(ADD_LAYOUT_WIDTH, layout.getStageWidth());
+        operationData.setParam(ADD_LAYOUT_CC, String.valueOf(layout.getCc()));
+
+        JSONArray smArray = new JSONArray();
+
+        for (LayoutComponent lc : layout.getComponentList()) {
+            JSONObject jsonLc = new JSONObject();
+            jsonLc.put(ADD_LAYOUT_COMP_DIM_X, lc.getDimX());
+            jsonLc.put(ADD_LAYOUT_COMP_DIM_Y, lc.getDimY());
+            jsonLc.put(ADD_LAYOUT_COMP_HEIGHT, lc.getHeight());
+            jsonLc.put(ADD_LAYOUT_COMP_WIDTH, lc.getWidth());
+            jsonLc.put(ADD_LAYOUT_COMP_ID, lc.getComponentId());
+
+            smArray.add(jsonLc);
+        }
+
+        operationData.setParam(ADD_LAYOUT_COMP_STRUCTURE, smArray.toJSONString());
+
+        System.out.println(JSONArray.toJSONString(sendOperation(operationData)));
+
+    }
 
     public static ArrayList<Item> getAdvertisingItem() {
 
         ArrayList<Item> item_list = new ArrayList();
 
-        OperationData operationData = new OperationData(OperationEnum.GET_ADVERTISING_VIDEO.toString());
-        operationData.setParam(FN_USER_ID, "0001202A000000001054");
+        OperationData operationData = new OperationData(OperationEnum.GET_ADVERTISING_ITEM.toString());
+        operationData.setParam(FN_USER_ID, NMCData.getInstance().getMerchantId());
 
         System.out.println(JSONArray.toJSONString(sendOperation(operationData)));
 
@@ -98,13 +180,15 @@ public class DataServiceFacade {
         ArrayList<Image> image_list = new ArrayList();
 
         OperationData operationData = new OperationData(OperationEnum.GET_ADVERTISING_IMAGE.toString());
-        operationData.setFilter(FN_USER_ID, "0001202A000000001054");
+        operationData.setFilter(FN_USER_ID, NMCData.getInstance().getMerchantId());
         operationData.setFilter("operator", "eq");
 
+        int i = 0;
         for (Object img : sendOperation(operationData)) {
             Image image = new Image();
-            image.setId((String) ((JSONObject) img).get(RS_IMAGE_ID));
-            image.setName(IMAGEIMAGE_PATH + (String) ((JSONObject) img).get(RS_IMAGE_NAME));
+            image.setId(++i);
+            image.setUrl(IMAGEIMAGE_PATH + (String) ((JSONObject) img).get(RS_IMAGE_NAME));
+            image.setAlt("click to change image");
             image_list.add(image);
         }
 
@@ -117,7 +201,7 @@ public class DataServiceFacade {
         ArrayList<Video> video_list = new ArrayList();
 
         OperationData operationData = new OperationData(OperationEnum.GET_ADVERTISING_VIDEO.toString());
-        operationData.setFilter(FN_USER_ID, "0001202A000000001054");
+        operationData.setFilter(FN_USER_ID, NMCData.getInstance().getMerchantId());
         operationData.setFilter("operator", "eq");
 
         System.out.println(JSONArray.toJSONString(sendOperation(operationData)));
@@ -128,8 +212,10 @@ public class DataServiceFacade {
     private static JSONArray sendOperation(OperationData operationData) {
 
         String jsonRequest = buildJsonToServer(operationData.getOperation(), operationData.getParams(), operationData.getFilters());
+        System.out.println(jsonRequest);
 
-        String jsonResponse = ConnectionHttps.doPost(defaultServer, jsonRequest);
+        String jsonResponse = null;
+        jsonResponse = ConnectionHttps.doPost(defaultServer, jsonRequest);
 
         JSONParser parser = new JSONParser();
 
@@ -176,6 +262,12 @@ public class DataServiceFacade {
         str.append("\"").append(FN_OPERATION_NAME).append("\":");
         str.append("\"").append(operation).append("\",");
 
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!Review!!!!!!!!!!!!!!!!!!!!!!!!
+        if (operation.equals("010100484")) {
+            str.append("\"").append("EXPECTED").append("\":");
+            str.append("\"").append("CM").append("\",");
+        }
+
         //Operation PARAMS
         str.append("\"").append(FN_PARAMS_NAME).append("\":");
         str.append("{");
@@ -184,7 +276,11 @@ public class DataServiceFacade {
         while (param.hasNext()) {
             Map.Entry<String, String> entry = param.next();
             str.append("\"").append((String) entry.getKey()).append("\":");
-            str.append("\"").append((String) entry.getValue()).append("\"");
+            if (entry.getKey() == ADD_LAYOUT_COMP_STRUCTURE) {
+                str.append((String) entry.getValue());
+            } else {
+                str.append("\"").append((String) entry.getValue()).append("\"");
+            }
             if (param.hasNext()) {
                 str.append(",");
             }

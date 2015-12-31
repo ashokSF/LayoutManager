@@ -31,7 +31,7 @@
 
         <h:outputStylesheet library="css" name="jquery.gridster.css" />
         <h:outputStylesheet library="css" name="style.css" />
-        
+
         <h:outputScript library="js" name="jquery.gridster.js" target="head"/>
         <h:outputScript library="js" name="CategoryGridster.js" target="head"/>   
 
@@ -45,13 +45,13 @@
 
             </p:layoutUnit>
 
-            <p:layoutUnit position="west" size="100" collapsible="false" header="Categories">
+            <p:layoutUnit position="west" size="200" collapsible="false" header="Categories">
 
                 <ui:insert name="categoryList" />
- 
+
             </p:layoutUnit>
 
-            <p:layoutUnit position="center" id="dropArea" header="Stage" size="400">
+            <p:layoutUnit position="center" id="dropArea" header="Stage">
                 <ui:insert name="layoutStage" />
 
             </p:layoutUnit>
@@ -59,9 +59,9 @@
 
             </p:droppable>
 
-            <p:layoutUnit header="#{propHeader}" position="east" size="600" collapsible="false">
-                <ui:insert name="properies" />
+            <p:layoutUnit header="#{propHeader}" position="east" size="400" collapsible="false">
 
+                <ui:insert name="properies" />
             </p:layoutUnit>
 
 

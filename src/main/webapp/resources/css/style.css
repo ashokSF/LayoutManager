@@ -15,7 +15,7 @@ ul {
 
 body {
     font-size: 16px;
-    font-family: 'Helvetica Neue', Arial, sans-serif;
+   // font-family: 'Helvetica Neue', Arial, sans-serif;
     color: #444;
     margin: 30px 40px;
 }
@@ -68,11 +68,11 @@ body {
 }
 
 .ui-widget {
-    font-size:80% !important;
+    font-size:90%;
 }
 
 .customPanel > .ui-panel-titlebar {
-    font-size: 80%;
+    font-size: 90%;
     border: none!important;
     text-align: center;
 }

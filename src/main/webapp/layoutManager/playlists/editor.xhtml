@@ -1,0 +1,18 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <p:slideMenu style="width:100%; font-size:100%; border: none!important; ">
+
+        <p:menuitem value="Edit items playlist" actionListener="#{layoutManager.setCurrentPlaylist('Items')}" update="propForm" icon="ui-icon-contact" />
+        <p:menuitem value="Edit images playlist" actionListener="#{layoutManager.setCurrentPlaylist('Images')}" update="propForm"  icon="ui-icon-image" />
+        <p:menuitem value="Edit videos playlist" actionListener="#{layoutManager.setCurrentPlaylist('Videos')}" update="propForm"  icon="ui-icon-video" />
+
+    </p:slideMenu>
+
+
+
+</ui:composition>

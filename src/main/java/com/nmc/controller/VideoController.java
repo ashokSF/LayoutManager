@@ -17,7 +17,7 @@ import org.apache.log4j.Logger;
  */
 @Named
 @RequestScoped
-public class VideoContoller {
+public class VideoController {
 
     @Inject
     DataServiceFacade dsf;
